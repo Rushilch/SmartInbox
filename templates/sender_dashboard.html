@@ -103,14 +103,6 @@
         <strong>Spam:</strong>
         <span id="llama-spam" class="badge">—</span>
       </div>
-      <div class="mb-2">
-        <strong>Raw Tone Response:</strong>
-        <pre id="llama-tone-raw" class="bg-light p-2 rounded small text-muted"></pre>
-      </div>
-      <div>
-        <strong>Raw Spam Response:</strong>
-        <pre id="llama-spam-raw" class="bg-light p-2 rounded small text-muted"></pre>
-      </div>
     </div>
   </div>
 </div>
@@ -286,8 +278,6 @@
         document.getElementById('llama-spam').className = `badge ${spam === 'Yes' ? 'bg-danger' : 'bg-success'}`;
 
         // Show raw responses
-        document.getElementById('llama-tone-raw').textContent = toneData.raw || '';
-        document.getElementById('llama-spam-raw').textContent = spamData.raw || '';
       } catch (err) {
         console.error('LLaMA analysis failed:', err);
         alert('Error analyzing email with LLaMA');

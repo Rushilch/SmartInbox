@@ -17,13 +17,14 @@ def init_db():
     conn = sqlite3.connect(DATABASE)
     c = conn.cursor()
 
+    # Fix: Removed trailing comma before closing parentheses
     c.execute('''
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY,
             email TEXT UNIQUE NOT NULL,
             password_hash TEXT NOT NULL,
             is_active BOOLEAN DEFAULT 1,
-            is_admin BOOLEAN DEFAULT 0,
+            is_admin BOOLEAN DEFAULT 0
         )
     ''')
 
@@ -42,6 +43,7 @@ def init_db():
         )
     ''')
 
+    # Insert admin user if not exists
     admin_email = "admin@mailsense.com"
     admin_pass = bcrypt.hashpw("Admin@123".encode(), bcrypt.gensalt()).decode()
     c.execute('''
@@ -51,6 +53,7 @@ def init_db():
 
     conn.commit()
     conn.close()
+
 
 init_db()
 

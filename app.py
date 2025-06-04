@@ -349,30 +349,34 @@ def register():
         email = f"{username}@sbox.com"
         password = request.form.get('password')
 
+        # Validation
         if not username or not password:
-            return render_template('register.html', error="All fields are required")
+            return jsonify({"status": "fail", "error": "All fields are required"}), 400
 
         if not re.match(r"^[a-zA-Z0-9_.-]+$", username):
-            return render_template('register.html', error="Invalid username")
+            return jsonify({"status": "fail", "error": "Invalid username"}), 400
 
         if len(password) < 6:
-            return render_template('register.html', error="Password must be at least 6 characters")
+            return jsonify({"status": "fail", "error": "Password must be at least 6 characters"}), 400
 
         conn = sqlite3.connect(DATABASE)
         c = conn.cursor()
         c.execute('SELECT id FROM users WHERE email = ?', (email,))
         if c.fetchone():
             conn.close()
-            return render_template('register.html', error="Username already taken")
+            return jsonify({"status": "fail", "error": "Username already taken"}), 400
 
         hashed_password = hash_password(password)
         c.execute('INSERT INTO users (email, password_hash) VALUES (?, ?)', (email, hashed_password))
         conn.commit()
         conn.close()
 
-        return redirect(url_for('login'))
+        # Success response with redirect URL
+        return jsonify({"status": "success", "message": "User registered successfully"})
 
+    # For GET request just render the registration page
     return render_template('register.html')
+
 
 
 @app.route('/admin/users/<int:user_id>', methods=['DELETE'])

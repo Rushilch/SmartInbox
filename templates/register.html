@@ -333,15 +333,6 @@
                     setTimeout(() => messageEl.style.animation = '', 500);
                 }
             } catch (error) {
-                if (!messageEl) {
-                    const newAlert = document.createElement('div');
-                    newAlert.className = 'alert alert-danger mt-3';
-                    newAlert.textContent = "Network error. Please try again.";
-                    document.getElementById('register-form').appendChild(newAlert);
-                } else {
-                    messageEl.textContent = "Network error. Please try again.";
-                    messageEl.classList.remove('d-none');
-                }
                 console.error("Registration error:", error);
             } finally {
                 submitBtn.innerHTML = originalBtnText;

@@ -3,12 +3,13 @@ from llama_cpp import Llama
 # Load your LLaMA 3.2 1B model
 llm = Llama(
     model_path="models/llama-3.2-3b-instruct-q4_k_m.gguf",
-    n_ctx=1024,
-    n_threads=6,
-    n_gpu_layers=0,
+    n_ctx=2048,  # Optimal balance for 16GB RAM
+    n_threads=12,  # Use all 12 threads of Ryzen 5500
+    n_gpu_layers=10,
+    n_batch=512,  # Helps with throughput
+    offload_kqv=True,  # Saves VRAM
     verbose=False
 )
-
 
 def generate_llama_response(prompt: str, max_tokens=64):
     output = llm(

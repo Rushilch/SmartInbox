@@ -18,38 +18,13 @@
         
         body {
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-            height: 100vh;
+            min-height: 100vh;
             font-family: 'Poppins', sans-serif;
-            overflow-x: hidden;
-        }
-        
-        .auth-container {
-            position: relative;
-            z-index: 1;
-        }
-        
-        .auth-container::before {
-            content: "";
-            position: absolute;
-            top: -50px;
-            left: -50px;
-            width: 200px;
-            height: 200px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-            z-index: -1;
-        }
-        
-        .auth-container::after {
-            content: "";
-            position: absolute;
-            bottom: -80px;
-            right: -80px;
-            width: 300px;
-            height: 300px;
-            background: rgba(255,255,255,0.08);
-            border-radius: 50%;
-            z-index: -1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
         }
         
         .auth-card {
@@ -59,7 +34,6 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
             border: none;
             overflow: hidden;
-            backdrop-filter: blur(5px);
             background: rgba(255,255,255,0.98);
         }
         
@@ -100,7 +74,6 @@
         .form-control:focus {
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(78, 115, 223, 0.2);
-            transform: translateY(-1px);
         }
         
         .input-group-text {
@@ -116,34 +89,11 @@
             letter-spacing: 0.5px;
             border-radius: 8px;
             transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
         }
         
         .btn-auth:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(78, 115, 223, 0.3);
-        }
-        
-        .btn-auth::after {
-            content: "";
-            position: absolute;
-            top: -50%;
-            left: -60%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                to right,
-                rgba(255, 255, 255, 0) 0%,
-                rgba(255, 255, 255, 0.1) 50%,
-                rgba(255, 255, 255, 0) 100%
-            );
-            transform: rotate(30deg);
-            transition: all 0.3s;
-        }
-        
-        .btn-auth:hover::after {
-            left: 100%;
         }
         
         .auth-footer {
@@ -157,26 +107,11 @@
             color: var(--primary-color);
             font-weight: 500;
             text-decoration: none;
-            position: relative;
         }
         
         .auth-link:hover {
             color: var(--primary-dark);
-        }
-        
-        .auth-link::after {
-            content: "";
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--primary-color);
-            transition: width 0.3s;
-        }
-        
-        .auth-link:hover::after {
-            width: 100%;
+            text-decoration: underline;
         }
         
         .password-toggle {
@@ -192,35 +127,14 @@
             height: 4px;
             background: #e9ecef;
             border-radius: 2px;
-            margin-top: 5px;
+            margin-top: 0.5rem;
             overflow: hidden;
         }
         
         .strength-meter {
             height: 100%;
             width: 0;
-            transition: all 0.3s;
-        }
-        
-        .floating-shapes {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            overflow: hidden;
-            z-index: 0;
-        }
-        
-        .shape {
-            position: absolute;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-        }
-        
-        @keyframes float {
-            0% { transform: translateY(0) rotate(0deg); }
-            100% { transform: translateY(-100px) rotate(360deg); }
+            transition: width 0.3s, background 0.3s;
         }
         
         @keyframes shake {
@@ -228,96 +142,213 @@
             20%, 60% { transform: translateX(-5px); }
             40%, 80% { transform: translateX(5px); }
         }
+        
+        .floating-shapes {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            z-index: -1;
+        }
+        
+        .shape {
+            position: absolute;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: float 8s infinite ease-in-out alternate;
+        }
+        
+        .shape:nth-child(1) {
+            width: 100px;
+            height: 100px;
+            top: 20%;
+            left: 10%;
+            animation-duration: 8s;
+        }
+        
+        .shape:nth-child(2) {
+            width: 60px;
+            height: 60px;
+            top: 60%;
+            left: 80%;
+            animation-duration: 6s;
+            animation-direction: alternate-reverse;
+        }
+        
+        .shape:nth-child(3) {
+            width: 80px;
+            height: 80px;
+            top: 80%;
+            left: 30%;
+            animation-duration: 10s;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-40px) rotate(360deg); }
+        }
     </style>
 </head>
-<body class="d-flex align-items-center">
+<body>
     <div class="floating-shapes">
-        <div class="shape" style="width: 100px; height: 100px; top: 20%; left: 10%; animation: float 8s infinite alternate;"></div>
-        <div class="shape" style="width: 60px; height: 60px; top: 60%; left: 80%; animation: float 6s infinite alternate-reverse;"></div>
-        <div class="shape" style="width: 80px; height: 80px; top: 80%; left: 30%; animation: float 10s infinite alternate;"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
     </div>
     
-    <div class="container auth-container">
-        <div class="row justify-content-center">
-            <div class="col-md-8 col-lg-6">
-                <div class="auth-card">
-                    <div class="auth-header">
-                        <div class="auth-logo">
-                            <i class="bi bi-envelope-open"></i> MailSense
-                        </div>
-                        <div class="auth-title">Join our secure email platform</div>
-                    </div>
-                    
-                    <div class="auth-body">
-                        <form method="POST" action="/register" id="register-form">
-                            <div class="mb-4">
-                                <label for="email" class="form-label">Email Address</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                                    <input type="email" name="email" id="email" class="form-control" placeholder="name@example.com" required>
-                                </div>
-                            </div>
-                            
-                            <div class="mb-4">
-                                <label for="password" class="form-label">Password</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                                    <input type="password" name="password" id="password" class="form-control" 
-                                           placeholder="••••••••" minlength="6" required>
-                                    <span class="input-group-text password-toggle" id="togglePassword">
-                                        <i class="bi bi-eye"></i>
-                                    </span>
-                                </div>
-                                <div class="password-strength mt-2">
-                                    <div class="strength-meter" id="strengthMeter"></div>
-                                </div>
-                                <small class="text-muted d-block mt-1">Minimum 6 characters</small>
-                            </div>
-                            
-                            <div class="mb-4">
-                                <label for="confirmPassword" class="form-label">Confirm Password</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
-                                    <input type="password" id="confirmPassword" class="form-control" 
-                                           placeholder="••••••••" required>
-                                </div>
-                                <small id="passwordMatch" class="text-danger d-none">Passwords don't match</small>
-                            </div>
-                            
-                            <div class="form-check mb-4">
-                                <input class="form-check-input" type="checkbox" id="terms" required>
-                                <label class="form-check-label" for="terms">
-                                    I agree to the <a href="#" class="auth-link">Terms of Service</a> and <a href="#" class="auth-link">Privacy Policy</a>
-                                </label>
-                            </div>
-                            
-                            <button type="submit" class="btn btn-primary btn-auth w-100 mb-3">
-                                <i class="bi bi-person-plus me-2"></i> Create Account
-                            </button>
-                            
-                            {% if error %}
-                            <div class="alert alert-danger alert-message mt-3" style="animation: shake 0.5s;">
-                                <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ error }}
-                            </div>
-                            {% endif %}
-                            
-                            {% if message %}
-                            <div class="alert alert-success alert-message mt-3">
-                                <i class="bi bi-check-circle-fill me-2"></i>{{ message }}
-                            </div>
-                            {% endif %}
-                        </form>
-                        
-                        <div class="auth-footer">
-                            <p class="mb-0">Already have an account? <a href="/login" class="auth-link">Sign in here</a></p>
-                        </div>
+    <div class="auth-card">
+        <div class="auth-header">
+            <div class="auth-logo">
+                <i class="bi bi-envelope-open"></i> MailSense
+            </div>
+            <div class="auth-title">Create your secure email account</div>
+        </div>
+        
+        <div class="auth-body">
+            <form id="register-form" method="POST" action="/register">
+                <div class="mb-4">
+                    <label for="username" class="form-label">Username</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <input type="text" name="username" id="username" class="form-control" placeholder="username" required>
+                        <span class="input-group-text">@sbox.com</span>
                     </div>
                 </div>
+                
+                <div class="mb-4">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                        <input type="password" name="password" id="password" class="form-control" placeholder="••••••••" required minlength="6">
+                        <span class="input-group-text password-toggle" id="togglePassword">
+                            <i class="bi bi-eye"></i>
+                        </span>
+                    </div>
+                    <div class="password-strength mt-2">
+                        <div class="strength-meter" id="password-strength"></div>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="confirm" class="form-label">Confirm Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                        <input type="password" id="confirm" class="form-control" placeholder="••••••••" required>
+                        <span class="input-group-text password-toggle" id="toggleConfirmPassword">
+                            <i class="bi bi-eye"></i>
+                        </span>
+                    </div>
+                    <small id="passwordMatch" class="text-danger d-none">Passwords don't match</small>
+                </div>
+                
+                <div class="form-check mb-4">
+                    <input class="form-check-input" type="checkbox" id="terms" required>
+                    <label class="form-check-label" for="terms">
+                        I agree to the <a href="#" class="auth-link">Terms of Service</a> and <a href="#" class="auth-link">Privacy Policy</a>
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-auth w-100 mb-3">
+                    <i class="bi bi-person-plus me-2"></i> Create Account
+                </button>
+                
+                {% if error %}
+                <div class="alert alert-danger mt-3">{{ error }}</div>
+                {% endif %}
+                
+                {% if message %}
+                <div class="alert alert-success mt-3">{{ message }}</div>
+                {% endif %}
+            </form>
+            
+            <div class="auth-footer">
+                <p class="mb-0">Already have an account? <a href="/login" class="auth-link">Sign in</a></p>
             </div>
         </div>
     </div>
 
     <script>
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const password = document.getElementById('password').value;
+            const confirm = document.getElementById('confirm').value;
+            const messageEl = document.querySelector('.alert');
+            const matchMsg = document.getElementById('passwordMatch');
+            
+            // Validate password match
+            if (password !== confirm) {
+                matchMsg.classList.remove('d-none');
+                document.getElementById('confirm').focus();
+                return;
+            } else {
+                matchMsg.classList.add('d-none');
+            }
+            
+            // Validate terms checkbox
+            if (!document.getElementById('terms').checked) {
+                if (!messageEl) {
+                    const newAlert = document.createElement('div');
+                    newAlert.className = 'alert alert-danger mt-3';
+                    newAlert.textContent = 'You must agree to the terms and conditions';
+                    document.getElementById('register-form').appendChild(newAlert);
+                } else {
+                    messageEl.textContent = 'You must agree to the terms and conditions';
+                    messageEl.classList.remove('d-none');
+                }
+                return;
+            }
+            
+            // Add loading state
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Creating account...';
+            submitBtn.disabled = true;
+            
+            try {
+                const formData = new FormData(e.target);
+                const response = await fetch('/register', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === "success") {
+                    window.location.href = data.redirect || '/login';
+                } else {
+                    if (!messageEl) {
+                        const newAlert = document.createElement('div');
+                        newAlert.className = 'alert alert-danger mt-3';
+                        newAlert.textContent = data.message || "Registration failed";
+                        document.getElementById('register-form').appendChild(newAlert);
+                    } else {
+                        messageEl.textContent = data.message || "Registration failed";
+                        messageEl.classList.remove('d-none');
+                    }
+                    // Shake animation for error
+                    messageEl.style.animation = 'shake 0.5s';
+                    setTimeout(() => messageEl.style.animation = '', 500);
+                }
+            } catch (error) {
+                if (!messageEl) {
+                    const newAlert = document.createElement('div');
+                    newAlert.className = 'alert alert-danger mt-3';
+                    newAlert.textContent = "Network error. Please try again.";
+                    document.getElementById('register-form').appendChild(newAlert);
+                } else {
+                    messageEl.textContent = "Network error. Please try again.";
+                    messageEl.classList.remove('d-none');
+                }
+                console.error("Registration error:", error);
+            } finally {
+                submitBtn.innerHTML = originalBtnText;
+                submitBtn.disabled = false;
+            }
+        });
+
         // Password toggle
         document.getElementById('togglePassword').addEventListener('click', function() {
             const passwordInput = document.getElementById('password');
@@ -334,59 +365,74 @@
             }
         });
 
-        // Password strength meter
-        document.getElementById('password').addEventListener('input', function() {
-            const strengthMeter = document.getElementById('strengthMeter');
-            const password = this.value;
-            let strength = 0;
+        // Confirm password toggle
+        document.getElementById('toggleConfirmPassword').addEventListener('click', function() {
+            const confirmInput = document.getElementById('confirm');
+            const icon = this.querySelector('i');
             
-            if (password.length >= 6) strength += 1;
-            if (password.length >= 8) strength += 1;
-            if (/[A-Z]/.test(password)) strength += 1;
-            if (/[0-9]/.test(password)) strength += 1;
-            if (/[^A-Za-z0-9]/.test(password)) strength += 1;
-            
-            const width = (strength / 5) * 100;
-            strengthMeter.style.width = `${width}%`;
-            
-            if (strength <= 1) {
-                strengthMeter.style.backgroundColor = '#dc3545';
-            } else if (strength <= 3) {
-                strengthMeter.style.backgroundColor = '#ffc107';
+            if (confirmInput.type === 'password') {
+                confirmInput.type = 'text';
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
             } else {
-                strengthMeter.style.backgroundColor = '#28a745';
+                confirmInput.type = 'password';
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
             }
         });
 
         // Password match validation
-        document.getElementById('confirmPassword').addEventListener('input', function() {
+        document.getElementById('confirm').addEventListener('input', function() {
             const password = document.getElementById('password').value;
-            const confirmPassword = this.value;
-            const matchText = document.getElementById('passwordMatch');
+            const confirm = this.value;
+            const matchMsg = document.getElementById('passwordMatch');
             
-            if (confirmPassword && password !== confirmPassword) {
-                matchText.classList.remove('d-none');
+            if (password !== confirm && confirm.length > 0) {
+                matchMsg.classList.remove('d-none');
             } else {
-                matchText.classList.add('d-none');
+                matchMsg.classList.add('d-none');
             }
         });
 
-        // Form submission
-        document.getElementById('register-form').addEventListener('submit', function(e) {
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            const terms = document.getElementById('terms').checked;
+        // Password strength indicator
+        document.getElementById('password').addEventListener('input', function() {
+            const strengthMeter = document.getElementById('password-strength');
+            const password = this.value;
+            let strength = 0;
             
-            if (password !== confirmPassword) {
-                e.preventDefault();
-                document.getElementById('passwordMatch').classList.remove('d-none');
-                document.getElementById('confirmPassword').focus();
+            // Check for length
+            if (password.length >= 8) strength += 1;
+            if (password.length >= 12) strength += 1;
+            
+            // Check for uppercase letters
+            if (/[A-Z]/.test(password)) strength += 1;
+            
+            // Check for numbers
+            if (/[0-9]/.test(password)) strength += 1;
+            
+            // Check for special characters
+            if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+            
+            // Update strength meter
+            let width = 0;
+            let color = '#dc3545'; // red
+            
+            if (strength <= 1) {
+                width = 25;
+                color = '#dc3545'; // red
+            } else if (strength <= 3) {
+                width = 50;
+                color = '#fd7e14'; // orange
+            } else if (strength <= 4) {
+                width = 75;
+                color = '#ffc107'; // yellow
+            } else {
+                width = 100;
+                color = '#28a745'; // green
             }
             
-            if (!terms) {
-                e.preventDefault();
-                alert('Please agree to the Terms of Service and Privacy Policy');
-            }
+            strengthMeter.style.width = `${width}%`;
+            strengthMeter.style.backgroundColor = color;
         });
     </script>
 </body>

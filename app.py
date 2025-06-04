@@ -165,7 +165,7 @@ def get_user_sent_emails():
     cur = conn.cursor()
 
     cur.execute("""
-        SELECT 
+        SELECT
             e.id,
             e.recipient_email,
             e.subject,
@@ -309,6 +309,8 @@ def sender_dashboard():
                          current_user=current_email, 
                          current_id=user_id, 
                          emails=sent_emails)
+
+
 @app.route('/admin_dashboard')
 def admin_dashboard():
     if 'user_id' not in session or not session.get('is_admin'):
@@ -338,17 +340,20 @@ def admin_dashboard():
 
     conn.close()
     return render_template('admin_dashboard.html', users=users, stats=stats, all_emails=all_emails, current_user=session.get('email'))
+
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        email = request.form.get('email')
+        username = request.form.get('username')
+        email = f"{username}@sbox.com"
         password = request.form.get('password')
 
-        if not email or not password:
-            return render_template('register.html', error="Email and password are required")
+        if not username or not password:
+            return render_template('register.html', error="All fields are required")
 
-        if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
-            return render_template('register.html', error="Invalid email format")
+        if not re.match(r"^[a-zA-Z0-9_.-]+$", username):
+            return render_template('register.html', error="Invalid username")
 
         if len(password) < 6:
             return render_template('register.html', error="Password must be at least 6 characters")
@@ -358,16 +363,17 @@ def register():
         c.execute('SELECT id FROM users WHERE email = ?', (email,))
         if c.fetchone():
             conn.close()
-            return render_template('register.html', error="Email already registered")
+            return render_template('register.html', error="Username already taken")
 
         hashed_password = hash_password(password)
         c.execute('INSERT INTO users (email, password_hash) VALUES (?, ?)', (email, hashed_password))
         conn.commit()
         conn.close()
 
-        return render_template('register.html', message="Registration successful! You can now login.")
+        return redirect(url_for('login'))
 
     return render_template('register.html')
+
 
 @app.route('/admin/users/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):

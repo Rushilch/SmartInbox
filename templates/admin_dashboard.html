@@ -372,16 +372,16 @@
   new Chart(ctx, {
     type: 'pie',
     data: {
-      labels: ['Active Users', 'Total Emails', 'Spam Emails', 'Read Emails'],
+      labels: ['Total Emails', 'Spam Emails', 'Read Emails'],
       datasets: [{
         label: 'Dashboard Stats',
         data: [
-          {{ stats.active_users }},
+
           {{ stats.total_emails }},
           {{ stats.spam_emails }},
           {{ stats.read_emails }}
         ],
-        backgroundColor: ['#4F46E5', '#2563EB', '#DB2777', '#16A34A'],
+        backgroundColor: ['#b30c3c', '#0a4fcf', '#16A34A'],
         hoverOffset: 30
       }]
     },
